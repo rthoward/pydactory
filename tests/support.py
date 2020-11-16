@@ -13,6 +13,7 @@ class Language(Enum):
     FRENCH = "fr"
     SPANISH = "es"
     GERMAN = "de"
+    RUSSIAN = "ru"
 
 
 class Review(BaseModel):
@@ -22,8 +23,9 @@ class Review(BaseModel):
 
 class Book(BaseModel):
     title: str = Field(alias="Title")
+    author: str = Field(alias="Author")
     pages: int = Field(alias="PageCount")
-    isbn_10: str = Field(alias="ISBN-10")
+    isbn_10: Optional[str] = Field(alias="ISBN-10")
     isbn_13: str = Field(alias="ISBN-13")
     dimensions: Tuple[Decimal, Decimal, Decimal] = Field(alias="Dimensions")
     publish_date: datetime = Field(alias="PublishDate")
@@ -32,11 +34,14 @@ class Book(BaseModel):
     # reviews: List[Review] = Field(alias="Reviews")
 
 
-class BlankBookFactory(Factory):
-    class Meta:
-        model = Book
-
-
 class BookFactory(Factory):
     class Meta:
         model = Book
+
+    title = "War and Peace"
+    author = "Leo Tolstoy"
+    pages = Factory.Fake.pyint(max_value=1000)
+    isbn_13 = "978-1400079988"
+    dimensions = ["1.0", "2.0", "3.0"]
+    language = Language.RUSSIAN
+    publish_date = datetime(1869, 1, 1)

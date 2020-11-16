@@ -1,5 +1,6 @@
-from tests.support import BlankBookFactory, BookFactory
+from tests.support import BookFactory
 
 
 def test_defaults():
-    print(BlankBookFactory.build())
+    book = BookFactory.build()
+    assert book.title == "War and Peace"
