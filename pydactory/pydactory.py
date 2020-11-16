@@ -1,4 +1,3 @@
-from decimal import Decimal
 from typing import Any, Callable, Dict, Optional, Type, Union
 
 from pydantic import BaseModel
@@ -16,12 +15,6 @@ class Factory:
         model: Optional[Type[BaseModel]] = None
 
     Fake = FakeGen()
-
-    DEFAULT_GEN: Dict[Type, FactoryField] = {
-        str: "foo",
-        Decimal: Decimal("1.23"),
-        list: [],
-    }
 
     @classmethod
     def build(cls, **overrides) -> BaseModel:
@@ -66,11 +59,9 @@ class Factory:
             return cls._evaluate_field(overrides[field.name], field)
         elif hasattr(cls, key):
             return cls._evaluate_field(getattr(cls, key), field)
-        elif field.type_ in cls.DEFAULT_GEN:
-            return cls._evaluate_field(cls.DEFAULT_GEN[field.type_], field)
         elif field.required:
-            raise ValueError(
-                f"Can't generate a value for {key}: unknown type {field.type_}"
+            raise PydactoryError(
+                f"{cls.__name__} does not define required field {field.name}."
             )
         else:
             return None
