@@ -6,6 +6,8 @@ authors = ["Richard Howard <richard@promptworks.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+pydantic = "^1.7.2"
+faker = "^4.15.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.1.2"
