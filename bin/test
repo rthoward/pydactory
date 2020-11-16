@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euo pipefail
+
+say() {
+  printf "\e[33m$1\e[0m\n"
+}
+
+say "==>> Formatting..."
+poetry run isort .
+poetry run black .
+
+say "\n==>> Linting..."
+poetry run flake8 pydactory tests
+
+say "\n==>> Typechecking..."
+poetry run mypy pydactory tests --pretty
+
+say "\n==>> Testing..."
+poetry run pytest "$@" --cov pydactory --cov-report html

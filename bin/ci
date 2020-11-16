@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -euo pipefail
+
+say() {
+  printf "\e[33m$1\e[0m\n"
+}
+
+say "==>> Installing dependencies..."
+poetry install -n
+
+say "\n==>> Checking formatting..."
+poetry run isort --check .
+poetry run black --check .
+
+say "\n==>> Linting..."
+poetry run flake8 pydactory
+
+say "\n==>> Typechecking..."
+poetry run mypy pydactory tests --pretty
+
+say "\n==>> Testing..."
+poetry run pytest --cov pydactory --cov-fail-under=100

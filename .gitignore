@@ -1,0 +1,11 @@
+__pycache__/
+*.egg-info/
+/.vscode/
+/.mypy_cache/
+/.coverage
+/htmlcov/
+/docs/html/
+/docs/stubs/
+/test.db
+/console.db
+.pytest_cache/

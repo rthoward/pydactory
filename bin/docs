@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -euo pipefail
+
+poetry run sphinx-build -W -b html docs docs/html
