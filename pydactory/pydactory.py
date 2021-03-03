@@ -3,8 +3,8 @@ from typing import Any, Callable, Dict, Optional, Type, Union
 from pydantic import BaseModel
 from pydantic.fields import ModelField
 
-from .errors import PydactoryError
-from .fake import FakeGen
+from pydactory.errors import PydactoryError
+from pydactory.fake import FakeGen
 
 FieldGenerator = Callable[[ModelField], Any]
 FactoryField = Union[FieldGenerator, Any]
