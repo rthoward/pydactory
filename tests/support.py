@@ -34,10 +34,7 @@ class Book(BaseModel):
     # reviews: List[Review] = Field(alias="Reviews")
 
 
-class BookFactory(Factory):
-    class Meta:
-        model = Book
-
+class BookFactory(Factory[Book]):
     title = "War and Peace"
     author = "Leo Tolstoy"
     pages = Factory.Fake.pyint(max_value=1000)

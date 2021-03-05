@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Optional, Type, Union
+from typing import Any, Callable, Dict, Generic, Optional, Type, TypeVar, Union, get_args
 
 from pydantic import BaseModel
 from pydantic.fields import ModelField
@@ -9,15 +9,14 @@ from pydactory.fake import FakeGen
 FieldGenerator = Callable[[ModelField], Any]
 FactoryField = Union[FieldGenerator, Any]
 
+T = TypeVar("T", bound=BaseModel)
 
-class Factory:
-    class Meta:
-        model: Optional[Type[BaseModel]] = None
 
+class Factory(Generic[T]):
     Fake = FakeGen()
 
     @classmethod
-    def build(cls, **overrides) -> BaseModel:
+    def build(cls, **overrides) -> T:
         """
         Build a valid model instance.
         """
@@ -39,19 +38,14 @@ class Factory:
         }
 
     @classmethod
-    def _model(cls) -> Type[BaseModel]:
-        maybe_model = getattr(cls.Meta, "model", None)
-        if maybe_model is None:
-            raise PydactoryError(
-                "Subclasses of PydanticFactory must provide an inner Meta "
-                "class with an attribute `model`"
-            )
+    def _model(cls) -> Type[T]:
+        model_cls: Type[T] = get_args(cls.__orig_bases__[0])[0]  # type: ignore
 
         try:
-            assert isinstance(maybe_model, type(BaseModel))
-            return maybe_model
+            assert isinstance(model_cls, type(BaseModel))
+            return model_cls
         except AssertionError:
-            raise PydactoryError("Meta.model must be a pydantic.BaseModel subclass")
+            raise PydactoryError(f"Type argument required for {cls.__name__}. Must be subclass of pydantic.BaseModel.")
 
     @classmethod
     def _generate_field(cls, key: str, field: ModelField, overrides: dict) -> Any:
