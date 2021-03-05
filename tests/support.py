@@ -1,7 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 from pydantic import BaseModel, Field
 
@@ -31,7 +31,7 @@ class Book(BaseModel):
     publish_date: datetime = Field(alias="PublishDate")
     language: Language = Field(alias="Language")
 
-    # reviews: List[Review] = Field(alias="Reviews")
+    reviews: List[Review] = Field(alias="Reviews")
 
 
 class BookFactory(Factory[Book]):
@@ -42,3 +42,4 @@ class BookFactory(Factory[Book]):
     dimensions = ["1.0", "2.0", "3.0"]
     language = Language.RUSSIAN
     publish_date = datetime(1869, 1, 1)
+    reviews = [Review.construct(rating=1, comment="too long")]
