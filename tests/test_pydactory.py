@@ -1,4 +1,4 @@
-from tests.support import BookFactory, PersonFactory
+from tests.support import BookFactory, PersonFactory, Address
 from decimal import Decimal
 from hamcrest import assert_that, has_properties  # type:ignore
 
@@ -23,3 +23,4 @@ def test_factories():
     assert isinstance(person.name, str)
     assert person.likes_cake
     assert person.likes_chocolate_cake is None
+    assert isinstance(person.address, Address)

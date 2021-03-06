@@ -54,6 +54,7 @@ class Address(BaseModel):
 
 class Person(BaseModel):
     name: str
+    address: Address
     likes_cake: bool = Field(default=True)
     likes_chocolate_cake: Optional[bool]
 

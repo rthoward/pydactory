@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Optional, Type, Union
+from typing import Any, Callable, Dict, Type, Union
 from pydantic import BaseModel
 from pydantic.fields import ModelField
 
@@ -13,15 +13,34 @@ GENS: Dict[Type, Callable[[ModelField], Any]] = {
     str: lambda _f: "fake",
     int: lambda _f: 1,
     list: lambda _f: [],
-    bool: lambda _f: False
+    bool: lambda _f: False,
+    BaseModel: lambda f: build_model(f.type_, factory=None, overrides={})
 }
 
 def can_gen_default(field: ModelField) -> bool:
-    return field.type_ in GENS
+    for type, gen_fn in GENS.items():
+        if field.type_ == type or isinstance(field.type_, type) or issubclass(field.type_, type):
+            return True
+
+    return False
 
 
 def gen_default(field: ModelField) -> Any:
-    return GENS[field.type_](field)
+    for type, gen_fn in GENS.items():
+        if field.type_ == type:
+            return gen_fn(field)
+
+    for type, gen_fn in GENS.items():
+        if isinstance(field.type_, type):
+            return gen_fn(field)
+
+    for type, gen_fn in GENS.items():
+        if issubclass(field.type_, type):
+            return gen_fn(field)
+
+
+def build_model(model: Type[BaseModel], factory: Any, overrides: Params) -> BaseModel:
+    return model(**build_fields(model, factory, overrides))
 
 
 def build_fields(model: Type[BaseModel], factory: Any, overrides: Params, by_alias=False) -> Params:
@@ -54,9 +73,6 @@ def build_field(key: str, field: ModelField, overrides: Params, factory: Any) ->
         f"{factory.__name__} does not define required field {field.name}."
     )
 
-@classmethod
-def search_override(cls, key: str) -> Optional[FieldGenerator]:
-    return getattr(cls, key, None)
 
 def evaluate_field(v: FactoryField, field: ModelField):
     return v(field) if callable(v) else v
