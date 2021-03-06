@@ -1,4 +1,4 @@
-from tests.support import BookFactory
+from tests.support import BookFactory, PersonFactory
 from decimal import Decimal
 from hamcrest import assert_that, has_properties  # type:ignore
 
@@ -16,3 +16,9 @@ def test_casted_attr():
 def test_overrides():
     book = BookFactory.build(title="Warren Peas")
     assert book.title == "Warren Peas"
+
+
+def test_factories():
+    person = PersonFactory.build()
+    assert isinstance(person.name, str)
+    assert person.likes_cake

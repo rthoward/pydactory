@@ -4,12 +4,26 @@ from pydantic import BaseModel
 from pydantic.fields import ModelField
 
 from pydactory.errors import PydactoryError
-from pydactory.fake import FakeGen
+from pydactory.fake import FakeGen, Faker
 
 FieldGenerator = Callable[[ModelField], Any]
 FactoryField = Union[FieldGenerator, Any]
 
 T = TypeVar("T", bound=BaseModel)
+
+GENS: Dict[Type, Callable[[ModelField], Any]] = {
+    str: lambda _f: "fake",
+    int: lambda _f: 1,
+    list: lambda _f: [],
+    bool: lambda _f: False
+}
+
+def can_gen(field: ModelField) -> bool:
+    return field.type_ in GENS
+
+
+def gen(field: ModelField) -> Any:
+    return GENS[field.type_](field)
 
 
 class Factory(Generic[T]):
@@ -60,6 +74,9 @@ class Factory(Generic[T]):
 
         if not field.required:
             return None
+
+        if can_gen(field):
+            return gen(field)
 
         raise PydactoryError(
             f"{cls.__name__} does not define required field {field.name}."

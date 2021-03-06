@@ -43,3 +43,19 @@ class BookFactory(Factory[Book]):
     language = Language.RUSSIAN
     publish_date = datetime(1869, 1, 1)
     reviews = [Review.construct(rating=1, comment="too long")]
+
+
+class Address(BaseModel):
+    street1: str
+    street2: str
+    city: str
+    state: str
+    zip: str = Field(max_length=5)
+
+class Person(BaseModel):
+    name: str
+    likes_cake: bool = Field(default=True)
+
+
+class PersonFactory(Factory[Person]):
+    ...
