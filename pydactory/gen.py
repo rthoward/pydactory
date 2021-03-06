@@ -20,7 +20,7 @@ GENS: Dict[Type, Callable[[ModelField], Any]] = {
 }
 
 def can_gen_default(field: ModelField) -> bool:
-    for type, gen_fn in GENS.items():
+    for type, _ in GENS.items():
         if field.type_ == type or isinstance(field.type_, type) or issubclass(field.type_, type):
             return True
 
