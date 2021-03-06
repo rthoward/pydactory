@@ -22,3 +22,4 @@ def test_factories():
     person = PersonFactory.build()
     assert isinstance(person.name, str)
     assert person.likes_cake
+    assert person.likes_chocolate_cake is None
