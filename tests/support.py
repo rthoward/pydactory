@@ -58,6 +58,7 @@ class Person(BaseModel):
     likes_cake: bool = Field(default=True)
     likes_chocolate_cake: Optional[bool]
     preferred_language: Language
+    dob: datetime
 
 
 class PersonFactory(Factory[Person]):

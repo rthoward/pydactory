@@ -25,3 +25,4 @@ def test_factories():
     assert person.likes_chocolate_cake is None
     assert isinstance(person.address, Address)
     assert person.preferred_language == Language.ENGLISH
+    assert person.dob
