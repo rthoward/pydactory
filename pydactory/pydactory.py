@@ -51,14 +51,19 @@ class Factory(Generic[T]):
     def _generate_field(cls, key: str, field: ModelField, overrides: dict) -> Any:
         if field.name in overrides:
             return cls._evaluate_field(overrides[field.name], field)
-        elif hasattr(cls, key):
+
+        if hasattr(cls, key):
             return cls._evaluate_field(getattr(cls, key), field)
-        elif field.required:
-            raise PydactoryError(
-                f"{cls.__name__} does not define required field {field.name}."
-            )
-        else:
+
+        if field.default:
+            return field.default
+
+        if not field.required:
             return None
+
+        raise PydactoryError(
+            f"{cls.__name__} does not define required field {field.name}."
+        )
 
     @classmethod
     def _search_override(cls, key: str) -> Optional[FieldGenerator]:
