@@ -57,6 +57,7 @@ class Person(BaseModel):
     address: Address
     likes_cake: bool = Field(default=True)
     likes_chocolate_cake: Optional[bool]
+    preferred_language: Language
 
 
 class PersonFactory(Factory[Person]):

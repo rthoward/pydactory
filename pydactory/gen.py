@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Any, Callable, Dict, Type, Union
 from pydantic import BaseModel
 from pydantic.fields import ModelField
@@ -14,7 +15,8 @@ GENS: Dict[Type, Callable[[ModelField], Any]] = {
     int: lambda _f: 1,
     list: lambda _f: [],
     bool: lambda _f: False,
-    BaseModel: lambda f: build_model(f.type_, factory=None, overrides={})
+    BaseModel: lambda f: build_model(f.type_, factory=None, overrides={}),
+    Enum: lambda f: list(f.type_._member_map_.values())[0],
 }
 
 def can_gen_default(field: ModelField) -> bool:
