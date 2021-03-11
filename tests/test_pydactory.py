@@ -1,4 +1,5 @@
-from tests.support import BookFactory, Language, PersonFactory, Address
+from pydactory import build_default
+from tests.support import BookFactory, Language, PersonFactory, Review, Address
 from decimal import Decimal
 from hamcrest import assert_that, has_properties  # type:ignore
 
@@ -26,3 +27,9 @@ def test_factories():
     assert isinstance(person.address, Address)
     assert person.preferred_language == Language.ENGLISH
     assert person.dob
+
+
+def test_build_default():
+    rating = build_default(Review, comment="really liked it")
+
+    assert rating.comment == "really liked it"
