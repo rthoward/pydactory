@@ -21,9 +21,26 @@ class Review(BaseModel):
     comment: Optional[str] = Field(alias="Comment")
 
 
+class Address(BaseModel):
+    street1: str
+    street2: str
+    city: str
+    state: str
+    zip: str = Field(max_length=5)
+
+
+class Author(BaseModel):
+    name: str
+    address: Address
+    likes_cake: bool = Field(default=True)
+    likes_chocolate_cake: Optional[bool]
+    preferred_language: Language
+    dob: datetime
+
+
 class Book(BaseModel):
     title: str = Field(alias="Title")
-    author: str = Field(alias="Author")
+    author: Author = Field(alias="Author")
     pages: int = Field(alias="PageCount")
     isbn_10: Optional[str] = Field(alias="ISBN-10")
     isbn_13: str = Field(alias="ISBN-13")
@@ -33,10 +50,13 @@ class Book(BaseModel):
 
     reviews: List[Review] = Field(alias="Reviews")
 
+class AuthorFactory(Factory[Author]):
+    ...
+
 
 class BookFactory(Factory[Book]):
     title = "War and Peace"
-    author = "Leo Tolstoy"
+    author = lambda _: AuthorFactory.build()
     pages = Factory.Fake.pyint(max_value=1000)
     isbn_13 = "978-1400079988"
     dimensions = ["1.0", "2.0", "3.0"]
@@ -44,22 +64,3 @@ class BookFactory(Factory[Book]):
     publish_date = datetime(1869, 1, 1)
     reviews = [Review.construct(rating=1, comment="too long")]
 
-
-class Address(BaseModel):
-    street1: str
-    street2: str
-    city: str
-    state: str
-    zip: str = Field(max_length=5)
-
-class Person(BaseModel):
-    name: str
-    address: Address
-    likes_cake: bool = Field(default=True)
-    likes_chocolate_cake: Optional[bool]
-    preferred_language: Language
-    dob: datetime
-
-
-class PersonFactory(Factory[Person]):
-    ...

@@ -1,12 +1,12 @@
 from pydactory import build_default
-from tests.support import BookFactory, Language, PersonFactory, Review, Address
+from tests.support import BookFactory, Language, AuthorFactory, Review, Address
 from decimal import Decimal
 from hamcrest import assert_that, has_properties  # type:ignore
 
 
 def test_defaults():
     book = BookFactory.build()
-    assert_that(book, has_properties(title="War and Peace", author="Leo Tolstoy"))
+    assert_that(book, has_properties(title="War and Peace", language=Language.RUSSIAN))
 
 
 def test_casted_attr():
@@ -20,13 +20,13 @@ def test_overrides():
 
 
 def test_factories():
-    person = PersonFactory.build()
-    assert isinstance(person.name, str)
-    assert person.likes_cake
-    assert person.likes_chocolate_cake is None
-    assert isinstance(person.address, Address)
-    assert person.preferred_language == Language.ENGLISH
-    assert person.dob
+    author = AuthorFactory.build()
+    assert isinstance(author.name, str)
+    assert author.likes_cake
+    assert author.likes_chocolate_cake is None
+    assert isinstance(author.address, Address)
+    assert author.preferred_language == Language.ENGLISH
+    assert author.dob
 
 
 def test_build_default():
