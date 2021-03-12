@@ -19,6 +19,11 @@ def test_overrides():
     assert book.title == "Warren Peas"
 
 
+def test_child_model():
+    book = BookFactory.build()
+    assert book.author.name
+
+
 def test_factories():
     author = AuthorFactory.build()
     assert isinstance(author.name, str)
