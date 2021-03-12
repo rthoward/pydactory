@@ -73,9 +73,14 @@ def build_field(key: str, field: ModelField, overrides: Params, factory: Any) ->
     if can_gen_default(field):
         return gen_default(field)
 
-    raise PydactoryError(
-        f"{factory.__name__} does not define required field {field.name}."
-    )
+    if factory:
+        raise PydactoryError(
+            f"{factory.__name__} does not define required field {field.name} and no default can be generated for type {field.type_.__class__}"
+        )
+    else:
+        raise PydactoryError(
+            f"No default can be generated for field {field.name} of type {field.type_}"
+        )
 
 
 def evaluate_field(v: FactoryField, field: ModelField):

@@ -1,4 +1,7 @@
-from pydactory import build_default
+import pytest
+
+from pydantic.main import BaseModel
+from pydactory import build_default, PydactoryError
 from tests.support import BookFactory, Language, AuthorFactory, Review, Address
 from decimal import Decimal
 from hamcrest import assert_that, has_properties  # type:ignore
@@ -38,3 +41,17 @@ def test_build_default():
     rating = build_default(Review, comment="really liked it")
 
     assert rating.comment == "really liked it"
+
+
+def test_cant_build_arbitrary_types():
+    class Foo:
+        ...
+
+    class BarModel(BaseModel):
+        foo: Foo
+
+        class Config:
+            arbitrary_types_allowed = True
+
+    with pytest.raises(PydactoryError):
+        build_default(BarModel)
