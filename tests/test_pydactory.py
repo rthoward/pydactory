@@ -61,6 +61,19 @@ def test_build_model_with_aliases_and_override():
     assert_that(rect, has_properties(height=2, width=4))
 
 
+def test_build_with_callable_param():
+    class User(BaseModel):
+        id: int
+
+
+    class UserFactory(Factory[User]):
+        id = lambda _: 123
+
+
+    user = UserFactory.build()
+    assert user.id == 123
+
+
 def test_factory_mixins():
     class Order(BaseModel):
         id: int
