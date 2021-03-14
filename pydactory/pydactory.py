@@ -30,13 +30,9 @@ class Factory(Generic[T]):
         return cls._model()(**cls.params(**overrides))
 
     @classmethod
-    def construct_params(cls, **overrides) -> Dict[str, Any]:
-        return gen.params(cls._model(), overrides)
-
-    @classmethod
-    def params(cls, **overrides) -> Dict[str, Any]:
+    def params(cls, alias=True, **overrides) -> Dict[str, Any]:
         params = gen.params(cls._model(), {**cls._field_overrides(), **overrides})
-        return kwargs_to_aliases(cls._model(), params)
+        return kwargs_to_aliases(cls._model(), params) if alias else params
 
     @classmethod
     def _model(cls) -> Type[T]:

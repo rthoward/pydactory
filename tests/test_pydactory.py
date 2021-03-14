@@ -77,3 +77,35 @@ def test_factory_mixins():
 
     order = OrderFactory.build()
     assert_that(order, has_properties(id=1, amount=2))
+
+
+def test_params():
+    class Square(BaseModel):
+        height: int
+        width: int
+
+
+    class SquareFactory(Factory[Square]):
+        height = 3
+        width = 4
+
+
+    params = SquareFactory.params(alias=False)
+    assert params["height"] == 3
+    assert params["width"] == 4
+
+
+def test_params_alias():
+    class Square(BaseModel):
+        height: int = Field(alias="Height")
+        width: int = Field(alias="Width")
+
+
+    class SquareFactory(Factory[Square]):
+        height = 3
+        width = 4
+
+
+    params = SquareFactory.params(alias=True)
+    assert params["Height"] == 3
+    assert params["Width"] == 4
