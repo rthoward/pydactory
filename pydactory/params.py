@@ -1,3 +1,4 @@
+from inspect import ismethod
 from typing import Any, Callable, Dict, Type, Union
 
 from pydantic import BaseModel
@@ -22,6 +23,8 @@ def params(model: Type[BaseModel], overrides: Params) -> Params:
 
 def param(key: str, field: ModelField, overrides: Params) -> Any:
     if field.name in overrides:
+        if ismethod(getattr(overrides[field.name], "build", None)):
+            return overrides[field.name].build()
         return eval_param(overrides[field.name], field)
 
     if field.default:

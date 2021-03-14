@@ -110,6 +110,23 @@ def test_build_default_values_unknown_throws_exception():
     assert isinstance(e.value, PydactoryError)
 
 
+def test_build_nested_factory():
+    class Foo(BaseModel):
+        pass
+
+    class Bar(BaseModel):
+        foo: Foo
+
+    class FooFactory(Factory[Foo]):
+        pass
+
+    class BarFactory(Factory[Bar]):
+        foo = FooFactory
+
+    bar = BarFactory.build()
+    assert isinstance(bar.foo, Foo)
+
+
 def test_factory_mixins():
     class Order(BaseModel):
         id: int
