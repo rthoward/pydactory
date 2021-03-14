@@ -127,6 +127,21 @@ def test_build_nested_factory():
     assert isinstance(bar.foo, Foo)
 
 
+def test_build_nested_model():
+    class Foo(BaseModel):
+        x: int
+
+    class Bar(BaseModel):
+        foo: Foo
+
+    class BarFactory(Factory[Bar]):
+        foo = Foo
+
+    bar = BarFactory.build()
+    assert isinstance(bar.foo, Foo)
+    assert bar.foo.x == 1
+
+
 def test_factory_mixins():
     class Order(BaseModel):
         id: int
