@@ -44,3 +44,18 @@ def test_build_model_with_aliases():
 
     square = SquareFactory.build()
     assert_that(square, has_properties(height=3, width=4))
+
+
+def test_build_model_with_aliases_and_override():
+    class Square(BaseModel):
+        height: int = Field(alias="Height")
+        width: int = Field(alias="Width")
+
+
+    class SquareFactory(Factory[Square]):
+        height = 3
+        width = 4
+
+
+    square = SquareFactory.build(height=2)
+    assert_that(square, has_properties(height=2, width=4))
