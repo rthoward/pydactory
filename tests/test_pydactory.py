@@ -74,6 +74,20 @@ def test_build_with_callable_param():
     assert user.id == 123
 
 
+@pytest.mark.parametrize("type_,expected", [(int, 1)])
+def test_build_default_values(type_, expected):
+    class Thing(BaseModel):
+        value: type_
+
+
+    class ThingFactory(Factory[Thing]):
+        id = lambda _: 123
+
+
+    user = ThingFactory.build()
+    assert user.value == expected
+
+
 def test_factory_mixins():
     class Order(BaseModel):
         id: int

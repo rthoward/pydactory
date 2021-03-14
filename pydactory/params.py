@@ -3,6 +3,9 @@ from typing import Any, Callable, Dict, Type, Union
 from pydantic import BaseModel
 from pydantic.fields import ModelField
 
+from pydactory.gen import try_gen_default
+from pydactory.errors import NoDefaultGeneratorError
+
 Params = Dict[str, Any]
 FieldGenerator = Callable[[ModelField], Any]
 FactoryField = Union[FieldGenerator, Any]
@@ -28,8 +31,7 @@ def param(key: str, field: ModelField, overrides: Params) -> Any:
     if not field.required:
         return None
 
-    # if can_gen_default(field):
-    #     return gen_default(field)
+    return try_gen_default(field.type_)
 
     # if factory:
     #     raise PydactoryError(
