@@ -59,3 +59,21 @@ def test_build_model_with_aliases_and_override():
 
     square = SquareFactory.build(height=2)
     assert_that(square, has_properties(height=2, width=4))
+
+
+def test_factory_mixins():
+    class Order(BaseModel):
+        id: int
+        amount: int
+
+
+    class Identifiable:
+        id = 1
+
+
+    class OrderFactory(Factory[Order], Identifiable):
+        amount = 2
+
+
+    order = OrderFactory.build()
+    assert_that(order, has_properties(id=1, amount=2))
