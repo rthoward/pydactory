@@ -1,9 +1,8 @@
-from pydantic.fields import ModelField
-
-from typing import Dict, Type, Callable, Any
-from enum import Enum
 from datetime import datetime
+from enum import Enum
+from typing import Any, Callable, Dict, Type
 
+from pydantic.fields import ModelField
 
 GENS: Dict[Type, Callable[[ModelField], Any]] = {
     str: lambda _f: "fake",
@@ -11,7 +10,7 @@ GENS: Dict[Type, Callable[[ModelField], Any]] = {
     list: lambda _f: [],
     bool: lambda _f: False,
     Enum: lambda f: list(f.type_._member_map_.values())[0],
-    datetime: lambda f: datetime(2000, 1, 1)
+    datetime: lambda f: datetime(2000, 1, 1),
 }
 
 
@@ -31,4 +30,3 @@ def try_gen_default(type_: Type) -> Any:
 
 # def build_model(model: Type[BaseModel], factory: Any, overrides: Params) -> BaseModel:
 #     return model(**build_fields(model, factory, overrides))
-

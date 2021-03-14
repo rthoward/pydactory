@@ -1,12 +1,12 @@
-from typing import Any, Dict, Generic, Type, TypeVar, get_args, Optional
+from typing import Any, Dict, Generic, Optional, Type, TypeVar, get_args
 
 from pydantic import BaseModel
-import pydactory
 
+import pydactory
+from pydactory import gen
 from pydactory.errors import PydactoryError
 from pydactory.fake import FakeGen
 from pydactory.params import params
-from pydactory import gen
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -44,11 +44,17 @@ class Factory(Generic[T]):
             assert isinstance(model_cls, type(BaseModel))
             return model_cls
         except AssertionError:
-            raise PydactoryError(f"Type argument required for {cls.__name__}. Must be subclass of pydantic.BaseModel.")
+            raise PydactoryError(
+                f"Type argument required for {cls.__name__}. Must be subclass of pydantic.BaseModel."
+            )
 
     @classmethod
     def _field_overrides(cls) -> Dict[str, Any]:
-        return {key: getattr(cls, key) for key, override in cls._model().__fields__.items() if hasattr(cls, key)}
+        return {
+            key: getattr(cls, key)
+            for key, override in cls._model().__fields__.items()
+            if hasattr(cls, key)
+        }
 
 
 # def build_default(model: Type[T], **overrides) -> T:

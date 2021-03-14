@@ -3,8 +3,8 @@ from typing import Any, Callable, Dict, Type, Union
 from pydantic import BaseModel
 from pydantic.fields import ModelField
 
-from pydactory.gen import try_gen_default
 from pydactory.errors import NoDefaultGeneratorError
+from pydactory.gen import try_gen_default
 
 Params = Dict[str, Any]
 FieldGenerator = Callable[[ModelField], Any]
@@ -16,8 +16,7 @@ def params(model: Type[BaseModel], overrides: Params) -> Params:
     #     return field.alias if by_alias else field.name
 
     return {
-        key: param(key, field, overrides)
-        for (key, field) in model.__fields__.items()
+        key: param(key, field, overrides) for (key, field) in model.__fields__.items()
     }
 
 
