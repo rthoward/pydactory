@@ -1,4 +1,4 @@
-from typing import Any, Dict, Generic, Type, TypeVar, get_args
+from typing import Any, Dict, Generic, Type, TypeVar, get_args, Optional
 
 from pydantic import BaseModel
 
@@ -7,6 +7,17 @@ from pydactory.fake import FakeGen
 from pydactory import gen
 
 T = TypeVar("T", bound=BaseModel)
+
+
+def kwargs_to_aliases(model: Type[T], kwargs: Dict[str, Any]) -> Dict[str, Any]:
+    def to_alias(k: str) -> Optional[str]:
+        try:
+            return model.__fields__[k].alias
+        except KeyError:
+            return None
+
+    return {alias: v for k, v in kwargs.items() if (alias := to_alias(k)) is not None}
+
 
 class Factory(Generic[T]):
     Fake = FakeGen()
@@ -24,7 +35,8 @@ class Factory(Generic[T]):
 
     @classmethod
     def params(cls, **overrides) -> Dict[str, Any]:
-        return gen.build_fields(cls._model(), {**cls._field_overrides(), **overrides})
+        params = gen.build_fields(cls._model(), {**cls._field_overrides(), **overrides})
+        return kwargs_to_aliases(cls._model(), params)
 
     @classmethod
     def _model(cls) -> Type[T]:
