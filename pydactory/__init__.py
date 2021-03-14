@@ -1,5 +1,5 @@
-from .pydactory import Factory, build_default, PydactoryError
+from .pydactory import Factory, PydactoryError
 
 __version__ = "0.1.0"
 
-__all__ = ["Factory", "build_default"]
+__all__ = ["Factory"]
