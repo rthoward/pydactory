@@ -24,9 +24,6 @@ def build_model(model: Type[Model], overrides: Params) -> Model:
 
 
 def params(model: Type[BaseModel], overrides: Params) -> Params:
-    # def key_fn(field: ModelField) -> str:
-    #     return field.alias if by_alias else field.name
-
     return {
         key: param(key, field, overrides) for (key, field) in model.__fields__.items()
     }

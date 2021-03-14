@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from pydactory import errors
 from pydactory.fake import FakeGen
-from pydactory.params import params, kwargs_to_aliases
+from pydactory.params import params, kwargs_to_aliases, build_model as _build_model
 from pydactory.types import Model
 
 
@@ -50,5 +50,5 @@ class Factory(Generic[Model]):
         }
 
 
-# def build_default(model: Type[T], **overrides) -> T:
-#     return model(**gen.build_fields(model, factory=None, overrides=overrides, by_alias=True))
+def build_model(model: Type[Model], **overrides) -> Model:
+    return _build_model(model, overrides)

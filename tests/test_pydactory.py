@@ -3,7 +3,7 @@ from hamcrest import assert_that, has_properties  # type:ignore
 from pydantic import BaseModel, Field
 from datetime import datetime
 
-from pydactory import Factory, PydactoryError
+from pydactory import Factory, PydactoryError, build_model
 from tests.support import Language
 
 
@@ -199,3 +199,25 @@ def test_params_alias():
     params = RectFactory.params(alias=True)
     assert params["Height"] == 3
     assert params["Width"] == 4
+
+
+def test_build_model():
+    class Rect(BaseModel):
+        height: int
+        width: int
+
+    rect = build_model(Rect)
+
+    assert hasattr(rect, "height")
+    assert hasattr(rect, "width")
+
+
+def test_build_model_with_overrides():
+    class Rect(BaseModel):
+        height: int
+        width: int
+
+    rect = build_model(Rect, height=100)
+
+    assert rect.height == 100
+    assert hasattr(rect, "width")
