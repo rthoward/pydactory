@@ -1,9 +1,11 @@
 from typing import Any, Dict, Generic, Type, TypeVar, get_args, Optional
 
 from pydantic import BaseModel
+import pydactory
 
 from pydactory.errors import PydactoryError
 from pydactory.fake import FakeGen
+from pydactory.params import params
 from pydactory import gen
 
 T = TypeVar("T", bound=BaseModel)
@@ -31,8 +33,8 @@ class Factory(Generic[T]):
 
     @classmethod
     def params(cls, alias=True, **overrides) -> Dict[str, Any]:
-        params = gen.params(cls._model(), {**cls._field_overrides(), **overrides})
-        return kwargs_to_aliases(cls._model(), params) if alias else params
+        params_ = params(cls._model(), {**cls._field_overrides(), **overrides})
+        return kwargs_to_aliases(cls._model(), params_) if alias else params_
 
     @classmethod
     def _model(cls) -> Type[T]:
