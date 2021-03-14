@@ -142,6 +142,22 @@ def test_build_nested_model():
     assert bar.foo.x == 1
 
 
+@pytest.mark.skip
+def test_build_nested_model_nested_overrides():
+    class Foo(BaseModel):
+        x: int
+
+    class Bar(BaseModel):
+        foo: Foo
+
+    class BarFactory(Factory[Bar]):
+        foo = Foo
+
+    bar = BarFactory.build(foo__x=256)
+    assert isinstance(bar.foo, Foo)
+    assert bar.foo.x == 256
+
+
 def test_factory_mixins():
     class Order(BaseModel):
         id: int
