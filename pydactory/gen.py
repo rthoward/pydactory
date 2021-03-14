@@ -4,12 +4,12 @@ from typing import Any, Callable, Dict, Type
 
 from pydantic.fields import ModelField
 
-GENS: Dict[Type, Callable[[ModelField], Any]] = {
+GENS: Dict[Type, Callable[[Type], Any]] = {
     str: lambda _f: "fake",
     int: lambda _f: 1,
     list: lambda _f: [],
     bool: lambda _f: False,
-    Enum: lambda f: list(f.type_._member_map_.values())[0],
+    Enum: lambda f: list(f._member_map_.values())[0],
     datetime: lambda f: datetime(2000, 1, 1),
 }
 

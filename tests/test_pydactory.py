@@ -1,8 +1,10 @@
 import pytest
 from hamcrest import assert_that, has_properties  # type:ignore
 from pydantic import BaseModel, Field
+from datetime import datetime
 
 from pydactory import Factory, PydactoryError
+from tests.support import Language
 
 
 def test_build_simple_factory():
@@ -68,7 +70,16 @@ def test_build_with_callable_param():
     assert user.id == 123
 
 
-@pytest.mark.parametrize("type_,expected", [(int, 1)])
+@pytest.mark.parametrize(
+    "type_,expected",
+    [
+        (int, 1),
+        (str, "fake"),
+        (bool, False),
+        (Language, Language.ENGLISH),
+        (datetime, datetime(2000, 1, 1)),
+    ],
+)
 def test_build_default_values(type_, expected):
     class Thing(BaseModel):
         value: type_
