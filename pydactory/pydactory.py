@@ -31,11 +31,11 @@ class Factory(Generic[T]):
 
     @classmethod
     def construct_params(cls, **overrides) -> Dict[str, Any]:
-        return gen.build_fields(cls._model(), overrides)
+        return gen.params(cls._model(), overrides)
 
     @classmethod
     def params(cls, **overrides) -> Dict[str, Any]:
-        params = gen.build_fields(cls._model(), {**cls._field_overrides(), **overrides})
+        params = gen.params(cls._model(), {**cls._field_overrides(), **overrides})
         return kwargs_to_aliases(cls._model(), params)
 
     @classmethod

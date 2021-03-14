@@ -47,19 +47,19 @@ Params = Dict[str, Any]
 #     return model(**build_fields(model, factory, overrides))
 
 
-def build_fields(model: Type[BaseModel], overrides: Params) -> Params:
+def params(model: Type[BaseModel], overrides: Params) -> Params:
     # def key_fn(field: ModelField) -> str:
     #     return field.alias if by_alias else field.name
 
     return {
-        key: build_field(key, field, overrides)
+        key: param(key, field, overrides)
         for (key, field) in model.__fields__.items()
     }
 
 
-def build_field(key: str, field: ModelField, overrides: Params) -> Any:
+def param(key: str, field: ModelField, overrides: Params) -> Any:
     if field.name in overrides:
-        return evaluate_field(overrides[field.name], field)
+        return eval_param(overrides[field.name], field)
 
     if field.default:
         return field.default
@@ -80,5 +80,5 @@ def build_field(key: str, field: ModelField, overrides: Params) -> Any:
     #     )
 
 
-def evaluate_field(v: FactoryField, field: ModelField):
+def eval_param(v: FactoryField, field: ModelField):
     return v(field) if callable(v) else v
