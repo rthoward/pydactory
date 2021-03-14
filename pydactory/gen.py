@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Callable, Dict, Type
 
-from pydantic.fields import ModelField
+from pydactory import errors
 
 GENS: Dict[Type, Callable[[Type], Any]] = {
     str: lambda _f: "fake",
@@ -26,6 +26,8 @@ def try_gen_default(type_: Type) -> Any:
     for t, fn in GENS.items():
         if issubclass(type_, t):
             return fn(type_)
+
+    raise errors.NoDefaultGeneratorError()
 
 
 # def build_model(model: Type[BaseModel], factory: Any, overrides: Params) -> BaseModel:

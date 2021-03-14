@@ -91,6 +91,25 @@ def test_build_default_values(type_, expected):
     assert user.value == expected
 
 
+def test_build_default_values_unknown_throws_exception():
+    class Foo:
+        pass
+
+    class Bar(BaseModel):
+        foo: Foo
+
+        class Config:
+            arbitrary_types_allowed = True
+
+    class BarFactory(Factory[Bar]):
+        pass
+
+    with pytest.raises(PydactoryError) as e:
+        BarFactory.build()
+
+    assert isinstance(e.value, PydactoryError)
+
+
 def test_factory_mixins():
     class Order(BaseModel):
         id: int

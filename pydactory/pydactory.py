@@ -2,9 +2,7 @@ from typing import Any, Dict, Generic, Optional, Type, TypeVar, get_args
 
 from pydantic import BaseModel
 
-import pydactory
-from pydactory import gen
-from pydactory.errors import PydactoryError
+from pydactory import errors
 from pydactory.fake import FakeGen
 from pydactory.params import params
 
@@ -33,7 +31,13 @@ class Factory(Generic[T]):
 
     @classmethod
     def params(cls, alias=True, **overrides) -> Dict[str, Any]:
-        params_ = params(cls._model(), {**cls._field_overrides(), **overrides})
+        try:
+            params_ = params(cls._model(), {**cls._field_overrides(), **overrides})
+        except errors.NoDefaultGeneratorError as e:
+            raise errors.PydactoryError(
+                f"Factory {cls} must define a value for param {e.key} of type {e.type}"
+            )
+
         return kwargs_to_aliases(cls._model(), params_) if alias else params_
 
     @classmethod
@@ -44,7 +48,7 @@ class Factory(Generic[T]):
             assert isinstance(model_cls, type(BaseModel))
             return model_cls
         except AssertionError:
-            raise PydactoryError(
+            raise errors.PydactoryError(
                 f"Type argument required for {cls.__name__}. Must be subclass of pydantic.BaseModel."
             )
 
