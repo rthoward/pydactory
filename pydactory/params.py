@@ -1,4 +1,4 @@
-from inspect import ismethod
+from inspect import isclass, ismethod
 from typing import Dict, Type, Any, Optional
 
 from pydantic import BaseModel
@@ -38,7 +38,7 @@ def param(key: str, field: ModelField, overrides: Params) -> Any:
 
         if ismethod(getattr(override_val, "build", None)):
             return override_val.build()
-        elif issubclass(override_val, BaseModel):
+        elif isclass(override_val) and issubclass(override_val, BaseModel):
             return build_model(override_val, overrides)  # type: ignore
         return eval_param(override_val, field)
 
