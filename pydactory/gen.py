@@ -1,7 +1,8 @@
 from datetime import datetime
 from enum import Enum
 from inspect import isclass
-from typing import Any, Callable, Dict, List, Type
+from typing import Any, Callable, Dict, Type
+from decimal import Decimal
 
 from pydactory import errors
 
@@ -13,6 +14,7 @@ GENS: Dict[Type, Callable[[Type], Any]] = {
     bool: lambda _f: False,
     Enum: lambda f: list(f._member_map_.values())[0],
     datetime: lambda f: datetime(2000, 1, 1),
+    Decimal: lambda _: Decimal("1.00"),
 }
 
 
