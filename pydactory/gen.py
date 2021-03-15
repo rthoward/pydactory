@@ -1,6 +1,7 @@
 from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, Type
+from inspect import isclass
+from typing import Any, Callable, Dict, List, Type
 
 from pydactory import errors
 
@@ -27,9 +28,13 @@ def try_gen_default(type_: Type) -> Any:
     if getattr(type_, "__origin__", None) == tuple:
         return tuple(try_gen_default(t) for t in type_.__args__)
 
-    for t, fn in GENS.items():
-        if issubclass(type_, t):
-            return fn(type_)
+    if getattr(type_, "__origin__", None) == list:
+        return []
+
+    if isclass(type_):
+        for t, fn in GENS.items():
+            if issubclass(type_, t):
+                return fn(type_)
 
     raise errors.NoDefaultGeneratorError()
 

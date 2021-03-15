@@ -46,9 +46,9 @@ def param(key: str, field: ModelField, overrides: Params) -> Any:
         return None
 
     try:
-        return try_gen_default(field.type_)
+        return try_gen_default(field.outer_type_)
     except errors.NoDefaultGeneratorError:
-        raise errors.NoDefaultGeneratorError(key=key, type_=field.type_)
+        raise errors.NoDefaultGeneratorError(key=key, type_=field.outer_type_)
 
 
 def eval_param(v: FactoryField, field: ModelField):
