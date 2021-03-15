@@ -7,4 +7,4 @@ class NoDefaultGeneratorError(Exception):
         self.key = key
         self.type = type_
         self.message = f"Default of type {type_} could not be generated for key {key}."
-        super().__init__()
+        super().__init__(self.message)
