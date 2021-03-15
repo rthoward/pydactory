@@ -1,3 +1,4 @@
+from typing import Tuple
 import pytest
 from hamcrest import assert_that, has_properties  # type:ignore
 from pydantic import BaseModel, Field
@@ -78,6 +79,7 @@ def test_build_with_callable_param():
         (bool, False),
         (Language, Language.ENGLISH),
         (datetime, datetime(2000, 1, 1)),
+        (Tuple[int, str, bool], (1, "fake", False)),
     ],
 )
 def test_build_default_values(type_, expected):
