@@ -37,7 +37,7 @@ def param(key: str, field: ModelField, overrides: Params) -> Any:
             return override_val.build()
         elif isclass(override_val) and issubclass(override_val, BaseModel):
             return build_model(override_val, overrides)  # type: ignore
-        return eval_param(override_val, field)
+        return eval_param(override_val)
 
     if field.default:
         return field.default
@@ -51,5 +51,5 @@ def param(key: str, field: ModelField, overrides: Params) -> Any:
         raise errors.NoDefaultGeneratorError(key=key, type_=field.outer_type_)
 
 
-def eval_param(v: FactoryField, field: ModelField):
-    return v(field) if callable(v) else v
+def eval_param(v: FactoryField):
+    return v() if callable(v) else v
