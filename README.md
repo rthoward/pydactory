@@ -4,9 +4,17 @@
 
 ## Installation
 
-PyPI: TODO
+PyPI: https://pypi.org/project/pydactory/
 
 `pip install pydactory`
+
+## Features
+
+`pydactory` is...
+
+**low boilerplate**: provides default values for many common types. You don't need to tell `pydactory` how to build your `name: str` fields
+
+**familiar**: define your factories like you define your `pydantic` models: in a simple, declarative syntax
 
 ## Getting started
 
