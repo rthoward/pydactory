@@ -20,4 +20,4 @@ say "\n==>> Typechecking..."
 poetry run mypy pydactory tests --pretty
 
 say "\n==>> Testing..."
-poetry run pytest --cov pydactory --cov-fail-under=100
+poetry run pytest --cov pydactory --cov-fail-under=90

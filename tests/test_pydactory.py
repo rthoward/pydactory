@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List, Tuple
 
 import pytest
-from hamcrest import assert_that, has_properties  # type:ignore
+from hamcrest import assert_that, has_properties
 from pydantic import BaseModel, Field
 
 from pydactory import Factory, PydactoryError, build_model
