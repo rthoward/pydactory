@@ -1,11 +1,10 @@
 from datetime import datetime
+from decimal import Decimal
 from enum import Enum
 from inspect import isclass
 from typing import Any, Callable, Dict, Type
-from decimal import Decimal
 
 from pydactory import errors
-
 
 GENS: Dict[Type, Callable[[Type], Any]] = {
     str: lambda _f: "fake",

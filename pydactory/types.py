@@ -1,7 +1,6 @@
-from typing import Dict, Any, Callable, Union, TypeVar
-from pydantic import BaseModel
-from pydantic.fields import ModelField
+from typing import Any, Callable, Dict, TypeVar, Union
 
+from pydantic import BaseModel
 
 Params = Dict[str, Any]
 FieldGenerator = Callable[[ModelField], Any]

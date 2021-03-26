@@ -4,7 +4,8 @@ from pydantic import BaseModel
 
 from pydactory import errors
 from pydactory.fake import FakeGen
-from pydactory.params import params, kwargs_to_aliases, build_model as _build_model
+from pydactory.params import build_model as _build_model
+from pydactory.params import kwargs_to_aliases, params
 from pydactory.types import Model
 
 

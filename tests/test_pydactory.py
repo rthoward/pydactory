@@ -1,8 +1,9 @@
+from datetime import datetime
 from typing import List, Tuple
+
 import pytest
 from hamcrest import assert_that, has_properties  # type:ignore
 from pydantic import BaseModel, Field
-from datetime import datetime
 
 from pydactory import Factory, PydactoryError, build_model
 from tests.support import Language
