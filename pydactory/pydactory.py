@@ -32,7 +32,7 @@ class Factory(Generic[Model]):
 
     @classmethod
     def _model(cls) -> Type[Model]:
-        model_cls: Type[T] = get_args(cls.__orig_bases__[0])[0]  # type: ignore
+        model_cls: Type[Model] = get_args(cls.__orig_bases__[0])[0]  # type: ignore
 
         try:
             assert isinstance(model_cls, type(BaseModel))

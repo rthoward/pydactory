@@ -57,7 +57,7 @@ class AuthorFactory(Factory[Author]):
 
 class BookFactory(Factory[Book]):
     title = "War and Peace"
-    author = lambda _: AuthorFactory.build()
+    author = AuthorFactory
     pages = Factory.Fake.pyint(max_value=1000)
     isbn_13 = "978-1400079988"
     dimensions = ["1.0", "2.0", "3.0"]

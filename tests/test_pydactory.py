@@ -66,7 +66,7 @@ def test_build_with_callable_param():
         id: int
 
     class UserFactory(Factory[User]):
-        id = lambda _: 123
+        id = lambda: 123
 
     user = UserFactory.build()
     assert user.id == 123
@@ -89,7 +89,7 @@ def test_build_default_values(type_, expected):
         value: type_
 
     class ThingFactory(Factory[Thing]):
-        id = lambda _: 123
+        id = lambda: 123
 
     user = ThingFactory.build()
     assert user.value == expected
