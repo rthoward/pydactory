@@ -2,7 +2,7 @@
 name = "pydactory"
 version = "0.1.0"
 description = ""
-authors = ["Richard Howard <richard@promptworks.com>"]
+authors = ["Richard Howard <richard@howard.io>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
