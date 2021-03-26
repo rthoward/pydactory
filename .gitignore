@@ -9,3 +9,4 @@ __pycache__/
 /test.db
 /console.db
 .pytest_cache/
+dist
