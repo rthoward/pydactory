@@ -146,6 +146,19 @@ def test_build_nested_model():
     assert bar.foo.x == 1
 
 
+def test_build_nested_model_list():
+    class Foo(BaseModel):
+        x: int
+
+    class Bar(BaseModel):
+        foos: List[Foo]
+
+    class BarFactory(Factory[Bar]):
+        ...
+
+    assert BarFactory.build().foos == []
+
+
 @pytest.mark.skip
 def test_build_nested_model_nested_overrides():
     class Foo(BaseModel):
