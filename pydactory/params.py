@@ -39,14 +39,17 @@ def param(key: str, field: ModelField, overrides: Params) -> Any:
             return build_model(override_val, overrides)
         return eval_param(override_val)
 
-    if isclass(field.type_) and issubclass(field.type_, BaseModel):
-        return build_model(field.type_, {})
+    if not field.required:
+        return None
 
     if field.default:
         return field.default
 
-    if not field.required:
-        return None
+    is_generic = field.outer_type_ != field.type_
+    is_model = isclass(field.type_) and issubclass(field.type_, BaseModel)
+
+    if is_model and not is_generic:
+        return build_model(field.type_, {})
 
     try:
         return try_gen_default(field.outer_type_)
