@@ -114,6 +114,16 @@ def test_build_default_values_unknown_throws_exception():
     assert isinstance(e.value, PydactoryError)
 
 
+def test_build_with_pydantic_default():
+    class Foo(BaseModel):
+        x: List[str] = Field(default=["a", "b", "c"])
+
+    class FooFactory(Factory[Foo]):
+        pass
+
+    assert FooFactory.build().x == ["a", "b", "c"]
+
+
 def test_build_nested_factory():
     class Foo(BaseModel):
         pass
