@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pydactory"
-version = "0.1.5"
+version = "0.1.6"
 description = "A factory library for pydantic models."
 authors = ["Richard Howard <richard@howard.io>"]
 license = "MIT"
