@@ -124,6 +124,16 @@ def test_build_with_pydantic_default():
     assert FooFactory.build().x == ["a", "b", "c"]
 
 
+def test_build_with_falsey_pydantic_default():
+    class Foo(BaseModel):
+        x: List[str] = Field(default=[])
+
+    class FooFactory(Factory[Foo]):
+        pass
+
+    assert FooFactory.build().x == []
+
+
 def test_build_nested_factory():
     class Foo(BaseModel):
         pass

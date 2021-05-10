@@ -9,6 +9,10 @@ from pydactory.gen import try_gen_default
 from pydactory.types import FactoryField, Model, Params
 
 
+class Unspecified:
+    ...
+
+
 def kwargs_to_aliases(model: Type[Model], kwargs: Dict[str, Any]) -> Dict[str, Any]:
     def to_alias(k: str) -> Optional[str]:
         try:
@@ -25,7 +29,9 @@ def build_model(model: Type[Model], overrides: Params) -> Model:
 
 def params(model: Type[BaseModel], overrides: Params) -> Params:
     return {
-        key: param(key, field, overrides) for (key, field) in model.__fields__.items()
+        key: value
+        for (key, field) in model.__fields__.items()
+        if (value := param(key, field, overrides)) is not Unspecified
     }
 
 
@@ -39,11 +45,8 @@ def param(key: str, field: ModelField, overrides: Params) -> Any:
             return build_model(override_val, overrides)
         return eval_param(override_val)
 
-    if field.default:
-        return field.default
-
-    if not field.required:
-        return None
+    if not field.required or (field.default is not None):
+        return Unspecified
 
     is_generic = field.outer_type_ != field.type_
     is_model = isclass(field.type_) and issubclass(field.type_, BaseModel)
