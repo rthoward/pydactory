@@ -1,4 +1,4 @@
-from typing import Any, Dict, Generic, Type, get_args
+from typing import Any, Dict, Generic, List, Type, get_args
 
 from pydantic import BaseModel
 
@@ -18,6 +18,10 @@ class Factory(Generic[Model]):
         Build a valid model instance.
         """
         return cls._model()(**cls.params(**overrides))
+
+    @classmethod
+    def build_batch(cls, count: int, **overrides) -> List[Model]:
+        return [cls.build(**overrides) for _ in range(count)]
 
     @classmethod
     def params(cls, alias=True, **overrides) -> Dict[str, Any]:
@@ -53,3 +57,7 @@ class Factory(Generic[Model]):
 
 def build_model(model: Type[Model], **overrides) -> Model:
     return _build_model(model, overrides)
+
+
+def build_model_batch(model: Type[Model], count: int, **overrides) -> List[Model]:
+    return [build_model(model, **overrides) for _ in range(count)]
