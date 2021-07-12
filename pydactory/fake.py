@@ -25,3 +25,6 @@ class FakeGen:
             return fake_func_wrapper
         except AttributeError:
             raise AttributeError(f"Not a valid fake: {name}")
+
+    def __call__(self, provider: str) -> Any:
+        return getattr(self.fake, provider)
