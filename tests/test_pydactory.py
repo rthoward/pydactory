@@ -6,7 +6,7 @@ from hamcrest import assert_that, has_properties
 from pydantic import BaseModel, Field
 
 from pydactory import Factory, PydactoryError, build_model
-from tests.support import Language
+from tests.support import Author, Language
 
 
 def test_build_simple_factory():
@@ -258,3 +258,20 @@ def test_build_model_with_overrides():
 
     assert rect.height == 100
     assert hasattr(rect, "width")
+
+
+def test_faker_integration():
+    class AuthorFactory(Factory[Author]):
+        name = Factory.Fake("name")
+
+    first_author = AuthorFactory.build()
+    second_author = AuthorFactory.build()
+
+    assert first_author.name and first_author.name != second_author.name
+
+
+def test_faker_integration_with_unknown_provider_throws_at_declaration_time():
+    with pytest.raises(AttributeError):
+
+        class _(Factory[Author]):
+            name = Factory.Fake("foo")
