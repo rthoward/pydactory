@@ -5,8 +5,8 @@ import pytest
 from hamcrest import assert_that, has_properties
 from pydantic import BaseModel, Field
 
-from pydactory import Factory, PydactoryError, build_model
-from tests.support import Author, Language
+from pydactory import Factory, PydactoryError, build_model, build_model_batch
+from tests.support import Author, AuthorFactory, Language
 
 
 def test_build_simple_factory():
@@ -275,3 +275,17 @@ def test_faker_integration_with_unknown_provider_throws_at_declaration_time():
 
         class _(Factory[Author]):
             name = Factory.Fake("foo")
+
+
+def test_build_batch():
+    authors = AuthorFactory.build_batch(5, name="John Steinbeck")
+
+    assert len(authors) == 5
+    assert all(author.name == "John Steinbeck" for author in authors)
+
+
+def test_build_model_batch():
+    authors = build_model_batch(Author, 5, name="John Steinbeck")
+
+    assert len(authors) == 5
+    assert all(author.name == "John Steinbeck" for author in authors)
